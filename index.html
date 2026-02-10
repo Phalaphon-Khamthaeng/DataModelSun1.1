@@ -494,7 +494,7 @@
     <div class="container">
         <header>
             <h1>Model Conversion</h1>
-            <p class="subtitle">ค้นหาข้อมูลรุ่นและการแปลงรุ่นโมเดล</p>
+            <p class="subtitle">ค้นหาข้อมูลรุ่นและการแปลงโมเดล</p>
             <div id="syncStatus" class="sync-status loading">
                 <span>⏳</span>
                 <span>กำลังโหลดข้อมูล...</span>
@@ -504,13 +504,15 @@
         <div class="search-section">
             <div class="input-group">
                 <label for="searchModel">ค้นหารุ่น (Model)</label>
-                <input 
-                    type="text" 
-                    id="searchModel" 
-                    placeholder="พิมพ์ชื่อรุ่นที่ต้องการค้นหา..."
-                    autocomplete="off"
-                >
-                <span class="search-icon">🔍</span>
+                <div style="position: relative;">
+                    <input 
+                        type="text" 
+                        id="searchModel" 
+                        placeholder="พิมพ์ชื่อรุ่นที่ต้องการค้นหา..."
+                        autocomplete="off"
+                    >
+                    <span class="search-icon">🔍</span>
+                </div>
                 <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
             </div>
         </div>

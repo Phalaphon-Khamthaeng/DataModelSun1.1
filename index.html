@@ -494,7 +494,7 @@
     <div class="container">
         <header>
             <h1>Model Conversion</h1>
-            <p class="subtitle">ค้นหาข้อมูลรุ่นที่แปลงโมเดล</p>
+            <p class="subtitle">ค้นหาข้อมูลรุ่นและการแปลงบอร์ด</p>
             <div id="syncStatus" class="sync-status loading">
                 <span>⏳</span>
                 <span>กำลังโหลดข้อมูล...</span>
@@ -712,7 +712,7 @@
         }
 
         function hasConversions(item) {
-            return item["Smart Model"] || item["AltSmart Model"] || item["IOC Board"] || item["SWC Board"] || item["VMC Board"];
+            return item["Smart Model"];
         }
 
         function updateSelected(items) {
@@ -768,8 +768,6 @@
             resultsInfo.textContent = `แสดง ${filteredData.length} รายการ`;
 
             container.innerHTML = filteredData.map((item, index) => {
-                const hasConversion = item["Smart Model"] || item["AltSmart Model"] || item["IOC Board"] || item["SWC Board"] || item["VMC Board"];
-                
                 return `
                 <div class="result-card" style="animation-delay: ${index * 0.05}s">
                     <div class="model-header">
@@ -800,35 +798,14 @@
                         </div>` : ''}
                     </div>
 
-                    ${hasConversion ? `
+                    ${item["Smart Model"] ? `
                     <div class="conversion-section">
                         <h4 class="conversion-title">🔄 สามารถแปลงเป็น</h4>
                         <div class="conversion-grid">
-                            ${item["Smart Model"] ? `
                             <div class="conversion-item">
                                 <span class="conversion-label">Smart Model:</span>
                                 <span class="conversion-value">${item["Smart Model"]}</span>
-                            </div>` : ''}
-                            ${item["AltSmart Model"] ? `
-                            <div class="conversion-item">
-                                <span class="conversion-label">AltSmart Model:</span>
-                                <span class="conversion-value">${item["AltSmart Model"]}</span>
-                            </div>` : ''}
-                            ${item["VMC Board"] ? `
-                            <div class="conversion-item">
-                                <span class="conversion-label">VMC Board:</span>
-                                <span class="conversion-value">${item["VMC Board"]}</span>
-                            </div>` : ''}
-                            ${item["IOC Board"] ? `
-                            <div class="conversion-item">
-                                <span class="conversion-label">IOC Board:</span>
-                                <span class="conversion-value">${item["IOC Board"]}</span>
-                            </div>` : ''}
-                            ${item["SWC Board"] ? `
-                            <div class="conversion-item">
-                                <span class="conversion-label">SWC Board:</span>
-                                <span class="conversion-value">${item["SWC Board"]}</span>
-                            </div>` : ''}
+                            </div>
                         </div>
                     </div>
                     ` : `
@@ -845,7 +822,7 @@
             document.getElementById('resultCount').textContent = filteredData.length;
             
             const modelsWithConversion = filteredData.filter(item => {
-                return item["Smart Model"] || item["AltSmart Model"] || item["IOC Board"] || item["SWC Board"] || item["VMC Board"];
+                return item["Smart Model"];
             }).length;
             
             document.getElementById('conversionCount').textContent = modelsWithConversion;

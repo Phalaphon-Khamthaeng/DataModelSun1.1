@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ค้นหา MODEL - Sun Vending</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            color: #e30613;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo p {
+            color: #636e72;
+            font-size: 1rem;
+        }
+
+        .search-box {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            color: #e30613;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 1.2rem 1.5rem;
+            font-size: 1.1rem;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            font-family: 'Sarabun', sans-serif;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #e30613;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.1);
+        }
+
+        input::placeholder {
+            color: #b2bec3;
+        }
+
+        .autocomplete {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid #e30613;
+            border-radius: 12px;
+            margin-top: 0.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(227, 6, 19, 0.2);
+        }
+
+        .autocomplete.show {
+            display: block;
+        }
+
+        .autocomplete-item {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f3f5;
+            transition: all 0.2s ease;
+        }
+
+        .autocomplete-item:hover {
+            background: #fff5f5;
+            padding-left: 2rem;
+        }
+
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+
+        .autocomplete-model {
+            font-weight: 600;
+            color: #2d3436;
+            font-size: 1rem;
+        }
+
+        .result-box {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            display: none;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid #e30613;
+        }
+
+        .result-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #e30613, #ff6b35);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .result-title {
+            color: #2d3436;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .smart-model {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .smart-model-label {
+            color: #636e72;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .smart-model-value {
+            color: #00b894;
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-shadow: 2px 2px 4px rgba(0, 184, 148, 0.2);
+        }
+
+        .no-result {
+            text-align: center;
+            padding: 3rem;
+            color: #636e72;
+        }
+
+        .no-result-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .sync-status {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #636e72;
+        }
+
+        .sync-status.loading {
+            color: #fdcb6e;
+        }
+
+        .sync-status.success {
+            color: #00b894;
+        }
+
+        .sync-status.error {
+            color: #d63031;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .logo h1 {
+                font-size: 2rem;
+            }
+
+            .search-box, .result-box {
+                padding: 1.5rem;
+            }
+
+            .smart-model-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <h1>🔍 ค้นหา MODEL</h1>
+            <p>Sun Vending Technology</p>
+        </div>
+
+        <div class="search-box">
+            <label for="searchModel">ค้นหา MODEL</label>
+            <div class="input-wrapper">
+                <input 
+                    type="text" 
+                    id="searchModel" 
+                    placeholder="พิมพ์ Model Name..."
+                    autocomplete="off"
+                >
+                <div class="autocomplete" id="autocomplete"></div>
+            </div>
+        </div>
+
+        <div class="result-box" id="resultBox">
+            <div class="result-header">
+                <div class="result-icon">📋</div>
+                <div>
+                    <div class="result-title">สามารถเปลี่ยนเป็น</div>
+                    <div id="modelName" style="color: #e30613; font-weight: 700; font-size: 1.1rem;"></div>
+                </div>
+            </div>
+            <div class="smart-model">
+                <div class="smart-model-label">Smart Model:</div>
+                <div class="smart-model-value" id="smartModel">-</div>
+            </div>
+        </div>
+
+        <div class="sync-status" id="syncStatus">
+            <span id="syncIcon">⏳</span> <span id="syncText">กำลังโหลดข้อมูล...</span>
+        </div>
+    </div>
+
+    <script>
+        // ===== ใส่ Google Sheets URL ที่นี่ =====
+        const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQKqIJwW0bdW77q6mNbDaRYUI8UzStbSTOH1cl6dGEpX12m-In68WTP4SlKAcDv4LGgLrMvq-SS07S0/pubhtml';
+        // ตัวอย่าง: 'https://docs.google.com/spreadsheets/d/e/2PACX-xxxxx/pub?output=csv'
+        
+        let allData = [];
+
+        // Load data from Google Sheets
+        async function loadData() {
+            const syncStatus = document.getElementById('syncStatus');
+            const syncIcon = document.getElementById('syncIcon');
+            const syncText = document.getElementById('syncText');
+            
+            syncStatus.className = 'sync-status loading';
+            syncIcon.textContent = '⏳';
+            syncText.textContent = 'กำลังโหลดข้อมูล...';
+
+            try {
+                const response = await fetch(GOOGLE_SHEETS_CSV_URL);
+                if (!response.ok) throw new Error('Cannot load data');
+                
+                const csvText = await response.text();
+                allData = parseCSV(csvText);
+                
+                syncStatus.className = 'sync-status success';
+                syncIcon.textContent = '✓';
+                syncText.textContent = `โหลดสำเร็จ ${allData.length} รายการ`;
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                syncStatus.className = 'sync-status error';
+                syncIcon.textContent = '✗';
+                syncText.textContent = 'ไม่สามารถโหลดข้อมูลได้ - กรุณาตรวจสอบ URL';
+            }
+        }
+
+        function parseCSV(csv) {
+            const lines = csv.split('\n').filter(line => line.trim());
+            if (lines.length === 0) return [];
+            
+            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            const data = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
+                const obj = {};
+                
+                headers.forEach((header, index) => {
+                    obj[header] = values[index] || '';
+                });
+                
+                data.push(obj);
+            }
+            
+            return data;
+        }
+
+        // Autocomplete
+        const searchInput = document.getElementById('searchModel');
+        const autocomplete = document.getElementById('autocomplete');
+        const resultBox = document.getElementById('resultBox');
+
+        searchInput.addEventListener('input', function() {
+            const value = this.value.toLowerCase().trim();
+            
+            if (value.length < 1) {
+                autocomplete.classList.remove('show');
+                resultBox.classList.remove('show');
+                return;
+            }
+            
+            const matches = allData.filter(item => 
+                (item["Model"] || "").toLowerCase().includes(value)
+            ).slice(0, 10);
+            
+            showAutocomplete(matches);
+        });
+
+        function showAutocomplete(matches) {
+            if (matches.length === 0) {
+                autocomplete.innerHTML = '<div class="autocomplete-item">ไม่พบ Model ที่ตรงกับการค้นหา</div>';
+                autocomplete.classList.add('show');
+                resultBox.classList.remove('show');
+                return;
+            }
+            
+            autocomplete.innerHTML = matches.map(item => `
+                <div class="autocomplete-item" onclick="selectModel('${item["Model"]}')">
+                    <div class="autocomplete-model">${item["Model"]}</div>
+                </div>
+            `).join('');
+            
+            autocomplete.classList.add('show');
+        }
+
+        function selectModel(modelName) {
+            searchInput.value = modelName;
+            autocomplete.classList.remove('show');
+            
+            const item = allData.find(d => d["Model"] === modelName);
+            
+            if (item) {
+                showResult(item);
+            }
+        }
+
+        function showResult(item) {
+            const modelNameEl = document.getElementById('modelName');
+            const smartModelEl = document.getElementById('smartModel');
+            
+            modelNameEl.textContent = item["Model"] || '-';
+            smartModelEl.textContent = item["Smart Model"] || 'ไม่มีข้อมูล';
+            
+            resultBox.classList.add('show');
+        }
+
+        // Close autocomplete when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !autocomplete.contains(e.target)) {
+                autocomplete.classList.remove('show');
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+        });
+    </script>
+</body>
+</html>

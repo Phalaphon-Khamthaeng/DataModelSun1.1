@@ -550,10 +550,10 @@
         });
 
         function handleSearchInput(e) {
-            const searchText = e.target.value.toLowerCase();
+            const searchText = e.target.value.trim();
             selectedIndex = -1;
 
-            // แสดงผลลัพธ์ทันทีทุกครั้งที่พิมพ์
+            // แสดงผลลัพธ์ทันทีทุกครั้งที่พิมพ์ - รักษาผลลัพธ์ให้คงที่ตามคำค้นหา
             searchData();
 
             if (searchText.length < 1) {
@@ -562,7 +562,7 @@
             }
 
             // แสดง autocomplete dropdown
-            showAutocomplete(searchText);
+            showAutocomplete(searchText.toLowerCase());
         }
 
         function handleKeyDown(e) {
@@ -652,21 +652,23 @@
         }
 
         function searchData() {
-            const searchText = document.getElementById('searchModel').value.toLowerCase().trim();
+            const searchText = document.getElementById('searchModel').value.trim();
 
             if (searchText.length === 0) {
                 filteredData = [...allData];
             } else {
+                const searchLower = searchText.toLowerCase();
                 filteredData = allData.filter(item => {
                     const model = (item["Model"] || "").toLowerCase();
                     const series = (item["Series"] || "").toLowerCase();
                     const machineType = (item["Machine Type"] || "").toLowerCase();
                     const smartModel = (item["Smart Model"] || "").toLowerCase();
                     
-                    return model.includes(searchText) || 
-                           series.includes(searchText) || 
-                           machineType.includes(searchText) ||
-                           smartModel.includes(searchText);
+                    // ค้นหาแบบเดิมให้ผลลัพธ์คงที่
+                    return model.includes(searchLower) || 
+                           series.includes(searchLower) || 
+                           machineType.includes(searchLower) ||
+                           smartModel.includes(searchLower);
                 });
             }
 

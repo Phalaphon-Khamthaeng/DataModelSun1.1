@@ -3,9 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ค้นหา MODEL - Sun Vending</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Model Conversion Finder - Google Sheets</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
+        :root {
+            /* Sun Vending Theme - Bright & Clean */
+            --primary: #e30613;          /* สีแดง Sun หลัก */
+            --accent: #ff1744;           /* สีแดงสด */
+            --accent-glow: #ff174433;
+            --secondary: #ff6b35;        /* สีส้มสด */
+            --bg: #f8f9fa;               /* พื้นหลังขาวอ่อน */
+            --surface: #ffffff;          /* พื้นผิวขาว */
+            --surface-light: #f5f5f5;    /* เทาอ่อนมาก */
+            --text: #2d3436;             /* ข้อความเทาเข้ม */
+            --text-dim: #636e72;         /* ข้อความเทากลาง */
+            --border: #e1e8ed;           /* ขอบสีเทาอ่อน */
+            --success: #00b894;          /* เขียวสด */
+            --warning: #fdcb6e;          /* เหลืองสด */
+            --shadow: rgba(0, 0, 0, 0.08);
+            --shadow-hover: rgba(227, 6, 19, 0.15);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,134 +32,435 @@
 
         body {
             font-family: 'Sarabun', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(227, 6, 19, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 23, 68, 0.06) 0%, transparent 50%);
+            animation: drift 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -30px) rotate(2deg); }
+            66% { transform: translate(-20px, 20px) rotate(-2deg); }
         }
 
         .container {
-            width: 100%;
-            max-width: 600px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
-        .logo {
+        header {
             text-align: center;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
         }
 
-        .logo h1 {
-            color: #e30613;
-            font-size: 2.5rem;
-            font-weight: 700;
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
         }
 
-        .logo p {
-            color: #636e72;
-            font-size: 1rem;
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            font-weight: 300;
         }
 
-        .search-box {
-            background: white;
+        .sync-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .sync-status.loading {
+            color: var(--warning);
+        }
+
+        .sync-status.success {
+            color: var(--success);
+        }
+
+        .sync-status.error {
+            color: var(--secondary);
+        }
+
+        .search-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
             margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px var(--shadow);
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .input-group {
+            position: relative;
         }
 
         label {
             display: block;
-            color: #e30613;
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
-        .input-wrapper {
-            position: relative;
-        }
-
-        input {
+        input[type="text"] {
             width: 100%;
-            padding: 1.2rem 1.5rem;
-            font-size: 1.1rem;
-            border: 2px solid #e1e8ed;
-            border-radius: 12px;
+            padding: 1rem 3rem 1rem 1.25rem;
+            font-size: 1rem;
             font-family: 'Sarabun', sans-serif;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--surface);
+            color: var(--text);
             transition: all 0.3s ease;
-            background: #f8f9fa;
         }
 
-        input:focus {
+        input[type="text"]:focus {
             outline: none;
-            border-color: #e30613;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(227, 6, 19, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-glow);
         }
 
-        input::placeholder {
-            color: #b2bec3;
+        .search-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            pointer-events: none;
+            font-size: 1.2rem;
         }
 
-        .autocomplete {
+        .autocomplete-dropdown {
             position: absolute;
             top: 100%;
             left: 0;
             right: 0;
-            background: white;
-            border: 2px solid #e30613;
+            background: var(--surface);
+            border: 1px solid var(--accent);
             border-radius: 12px;
             margin-top: 0.5rem;
             max-height: 300px;
             overflow-y: auto;
-            display: none;
             z-index: 1000;
-            box-shadow: 0 8px 32px rgba(227, 6, 19, 0.2);
+            box-shadow: 0 8px 32px var(--shadow-hover);
+            display: none;
         }
 
-        .autocomplete.show {
+        .autocomplete-dropdown.active {
             display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .autocomplete-item {
-            padding: 1rem 1.5rem;
+            padding: 1rem;
             cursor: pointer;
-            border-bottom: 1px solid #f1f3f5;
             transition: all 0.2s ease;
-        }
-
-        .autocomplete-item:hover {
-            background: #fff5f5;
-            padding-left: 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .autocomplete-item:last-child {
             border-bottom: none;
         }
 
-        .autocomplete-model {
+        .autocomplete-item:hover {
+            background: var(--surface-light);
+            padding-left: 1.5rem;
+        }
+
+        .autocomplete-item.selected {
+            background: var(--accent-glow);
+            border-left: 3px solid var(--accent);
+        }
+
+        .autocomplete-main {
+            flex: 1;
+        }
+
+        .autocomplete-title {
             font-weight: 600;
-            color: #2d3436;
+            color: var(--text);
+            margin-bottom: 0.25rem;
+        }
+
+        .autocomplete-meta {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .autocomplete-tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            background: var(--accent-glow);
+            color: var(--accent);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 0.25rem;
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px var(--shadow-hover);
+            border-color: var(--accent);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+        }
+
+        .results-info {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        .results-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .result-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px var(--shadow-hover);
+            border-color: var(--accent);
+        }
+
+        .model-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .model-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .model-year {
+            background: var(--accent);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .model-info {
+            margin-bottom: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--surface-light);
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .conversion-section {
+            background: linear-gradient(135deg, var(--accent-glow), rgba(255, 107, 53, 0.1));
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .conversion-title {
             font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
         }
 
-        .result-box {
-            background: white;
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            display: none;
-            animation: slideUp 0.4s ease-out;
+        .conversion-grid {
+            display: grid;
+            gap: 0.5rem;
         }
 
-        .result-box.show {
-            display: block;
+        .conversion-item {
+            background: var(--surface);
+            padding: 0.75rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        @keyframes slideUp {
+        .conversion-label {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        .conversion-value {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .no-conversion {
+            background: var(--surface-light);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-dim);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-state-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
                 transform: translateY(30px);
@@ -152,267 +471,385 @@
             }
         }
 
-        .result-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 3px solid #e30613;
-        }
-
-        .result-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #e30613, #ff6b35);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-        }
-
-        .result-title {
-            color: #2d3436;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .smart-model {
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .smart-model-label {
-            color: #636e72;
-            font-size: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .smart-model-value {
-            color: #00b894;
-            font-size: 3rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            text-shadow: 2px 2px 4px rgba(0, 184, 148, 0.2);
-        }
-
-        .no-result {
-            text-align: center;
-            padding: 3rem;
-            color: #636e72;
-        }
-
-        .no-result-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.3;
-        }
-
-        .sync-status {
-            text-align: center;
-            margin-top: 1.5rem;
-            font-size: 0.9rem;
-            color: #636e72;
-        }
-
-        .sync-status.loading {
-            color: #fdcb6e;
-        }
-
-        .sync-status.success {
-            color: #00b894;
-        }
-
-        .sync-status.error {
-            color: #d63031;
-        }
-
         @media (max-width: 768px) {
-            body {
+            .container {
                 padding: 1rem;
             }
 
-            .logo h1 {
-                font-size: 2rem;
-            }
-
-            .search-box, .result-box {
+            .search-section {
                 padding: 1.5rem;
             }
 
-            .smart-model-value {
-                font-size: 2rem;
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+
+            .results-container {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">
-            <h1>🔍 ค้นหา MODEL</h1>
-            <p>Sun Vending Technology</p>
-        </div>
+        <header>
+            <h1>Model Conversion</h1>
+            <p class="subtitle">ค้นหาข้อมูลรุ่นและการแปลงบอร์ด</p>
+            <div id="syncStatus" class="sync-status loading">
+                <span>⏳</span>
+                <span>กำลังโหลดข้อมูล...</span>
+            </div>
+        </header>
 
-        <div class="search-box">
-            <label for="searchModel">ค้นหา MODEL</label>
-            <div class="input-wrapper">
+        <div class="search-section">
+            <div class="input-group">
+                <label for="searchModel">ค้นหารุ่น (Model)</label>
                 <input 
                     type="text" 
                     id="searchModel" 
-                    placeholder="พิมพ์ Model Name..."
+                    placeholder="พิมพ์ชื่อรุ่นที่ต้องการค้นหา..."
                     autocomplete="off"
                 >
-                <div class="autocomplete" id="autocomplete"></div>
+                <span class="search-icon">🔍</span>
+                <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
             </div>
         </div>
 
-        <div class="result-box" id="resultBox">
-            <div class="result-header">
-                <div class="result-icon">📋</div>
-                <div>
-                    <div class="result-title">สามารถเปลี่ยนเป็น</div>
-                    <div id="modelName" style="color: #e30613; font-weight: 700; font-size: 1.1rem;"></div>
-                </div>
+        <div class="stats-section">
+            <div class="stat-card">
+                <div class="stat-number" id="totalModels">0</div>
+                <div class="stat-label">รุ่นทั้งหมด</div>
             </div>
-            <div class="smart-model">
-                <div class="smart-model-label">Smart Model:</div>
-                <div class="smart-model-value" id="smartModel">-</div>
+            <div class="stat-card">
+                <div class="stat-number" id="resultCount">0</div>
+                <div class="stat-label">ผลลัพธ์ที่พบ</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="conversionCount">0</div>
+                <div class="stat-label">มีข้อมูลแปลง</div>
             </div>
         </div>
 
-        <div class="sync-status" id="syncStatus">
-            <span id="syncIcon">⏳</span> <span id="syncText">กำลังโหลดข้อมูล...</span>
+        <div class="results-header">
+            <h2 id="resultsInfo">ผลการค้นหา</h2>
+        </div>
+
+        <div id="resultsContainer" class="results-container">
+            <!-- Results will be populated here -->
         </div>
     </div>
 
     <script>
         // ===== ใส่ Google Sheets URL ที่นี่ =====
-        const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQKqIJwW0bdW77q6mNbDaRYUI8UzStbSTOH1cl6dGEpX12m-In68WTP4SlKAcDv4LGgLrMvq-SS07S0/pubhtml';
+        // วิธีการ: File > Share > Publish to web > Link > Sheet1 > CSV
+        const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQKqIJwW0bdW77q6mNbDaRYUI8UzStbSTOH1cl6dGEpX12m-In68WTP4SlKAcDv4LGgLrMvq-SS07S0/pub?output=csv';
         // ตัวอย่าง: 'https://docs.google.com/spreadsheets/d/e/2PACX-xxxxx/pub?output=csv'
-        
-        let allData = [];
 
-        // Load data from Google Sheets
+        let allData = [];
+        let filteredData = [];
+        let selectedIndex = -1;
+
+        // ฟังก์ชันแปลง CSV เป็น Array
+        function parseCSV(csv) {
+            const lines = csv.split('\n');
+            return lines.map(line => {
+                const values = [];
+                let current = '';
+                let inQuotes = false;
+                
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
+                    
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        values.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                values.push(current.trim());
+                return values;
+            }).filter(row => row.some(cell => cell !== ''));
+        }
+
         async function loadData() {
             const syncStatus = document.getElementById('syncStatus');
-            const syncIcon = document.getElementById('syncIcon');
-            const syncText = document.getElementById('syncText');
             
-            syncStatus.className = 'sync-status loading';
-            syncIcon.textContent = '⏳';
-            syncText.textContent = 'กำลังโหลดข้อมูล...';
-
             try {
+                syncStatus.className = 'sync-status loading';
+                syncStatus.innerHTML = '<span>⏳</span><span>กำลังโหลดข้อมูล...</span>';
+
                 const response = await fetch(GOOGLE_SHEETS_CSV_URL);
-                if (!response.ok) throw new Error('Cannot load data');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 
                 const csvText = await response.text();
-                allData = parseCSV(csvText);
-                
+                const rows = parseCSV(csvText);
+
+                if (!rows || rows.length === 0) {
+                    throw new Error('No data found');
+                }
+
+                const headers = rows[0];
+                allData = rows.slice(1).map(row => {
+                    const obj = {};
+                    headers.forEach((header, index) => {
+                        obj[header] = row[index] || '';
+                    });
+                    return obj;
+                });
+
+                filteredData = [...allData];
+                displayResults();
+                updateStats();
+
                 syncStatus.className = 'sync-status success';
-                syncIcon.textContent = '✓';
-                syncText.textContent = `โหลดสำเร็จ ${allData.length} รายการ`;
-                
+                syncStatus.innerHTML = '<span>✓</span><span>โหลดข้อมูลสำเร็จ</span>';
+
             } catch (error) {
                 console.error('Error loading data:', error);
                 syncStatus.className = 'sync-status error';
-                syncIcon.textContent = '✗';
-                syncText.textContent = 'ไม่สามารถโหลดข้อมูลได้ - กรุณาตรวจสอบ URL';
+                syncStatus.innerHTML = '<span>✗</span><span>โหลดข้อมูลล้มเหลว</span>';
             }
         }
 
-        function parseCSV(csv) {
-            const lines = csv.split('\n').filter(line => line.trim());
-            if (lines.length === 0) return [];
-            
-            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
-            const data = [];
-            
-            for (let i = 1; i < lines.length; i++) {
-                const values = lines[i].split(',').map(v => v.trim().replace(/"/g, ''));
-                const obj = {};
-                
-                headers.forEach((header, index) => {
-                    obj[header] = values[index] || '';
-                });
-                
-                data.push(obj);
-            }
-            
-            return data;
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
 
-        // Autocomplete
-        const searchInput = document.getElementById('searchModel');
-        const autocomplete = document.getElementById('autocomplete');
-        const resultBox = document.getElementById('resultBox');
+            const searchInput = document.getElementById('searchModel');
+            const dropdown = document.getElementById('autocompleteDropdown');
 
-        searchInput.addEventListener('input', function() {
-            const value = this.value.toLowerCase().trim();
+            searchInput.addEventListener('input', handleSearchInput);
+            searchInput.addEventListener('keydown', handleKeyDown);
             
-            if (value.length < 1) {
-                autocomplete.classList.remove('show');
-                resultBox.classList.remove('show');
-                return;
-            }
-            
-            const matches = allData.filter(item => 
-                (item["Model"] || "").toLowerCase().includes(value)
-            ).slice(0, 10);
-            
-            showAutocomplete(matches);
+            document.addEventListener('click', (e) => {
+                if (!searchInput.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.remove('active');
+                }
+            });
         });
 
-        function showAutocomplete(matches) {
-            if (matches.length === 0) {
-                autocomplete.innerHTML = '<div class="autocomplete-item">ไม่พบ Model ที่ตรงกับการค้นหา</div>';
-                autocomplete.classList.add('show');
-                resultBox.classList.remove('show');
+        function handleSearchInput(e) {
+            const searchText = e.target.value.toLowerCase();
+            selectedIndex = -1;
+
+            if (searchText.length < 1) {
+                document.getElementById('autocompleteDropdown').classList.remove('active');
+                filteredData = [...allData];
+                displayResults();
+                updateStats();
                 return;
             }
+
+            showAutocomplete(searchText);
+            searchData();
+        }
+
+        function handleKeyDown(e) {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            const items = dropdown.querySelectorAll('.autocomplete-item');
+
+            if (!dropdown.classList.contains('active') || items.length === 0) return;
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
+                updateSelected(items);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = Math.max(selectedIndex - 1, 0);
+                updateSelected(items);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (selectedIndex >= 0) {
+                    items[selectedIndex].click();
+                }
+            } else if (e.key === 'Escape') {
+                dropdown.classList.remove('active');
+            }
+        }
+
+        function showAutocomplete(search) {
+            const dropdown = document.getElementById('autocompleteDropdown');
             
-            autocomplete.innerHTML = matches.map(item => `
-                <div class="autocomplete-item" onclick="selectModel('${item["Model"]}')">
-                    <div class="autocomplete-model">${item["Model"]}</div>
-                </div>
-            `).join('');
+            const matches = allData.filter(item => {
+                const model = (item["Model"] || "").toLowerCase();
+                return model.includes(search);
+            }).slice(0, 10);
+
+            if (matches.length === 0) {
+                dropdown.classList.remove('active');
+                return;
+            }
+
+            dropdown.innerHTML = matches.map((item, index) => {
+                return `
+                    <div class="autocomplete-item" onclick="selectModel('${item["Model"]}')" data-index="${index}">
+                        <div class="autocomplete-main">
+                            <div class="autocomplete-title">${highlightText(item["Model"] || 'N/A', search)}</div>
+                            <div class="autocomplete-meta">
+                                ${item["Series"] ? `<span class="autocomplete-tag">${item["Series"]}</span>` : ''}
+                                ${item["Machine Type"] ? `<span class="autocomplete-tag">${item["Machine Type"]}</span>` : ''}
+                                ${item["Model Year"] ? `<span class="autocomplete-tag">${item["Model Year"]}</span>` : ''}
+                            </div>
+                        </div>
+                        ${hasConversions(item) ? '<span style="color: var(--success);">✓</span>' : ''}
+                    </div>
+                `;
+            }).join('');
             
-            autocomplete.classList.add('show');
+            dropdown.classList.add('active');
+        }
+
+        function highlightText(text, search) {
+            if (!search) return text;
+            const regex = new RegExp(`(${search})`, 'gi');
+            return text.replace(regex, '<span style="background: var(--accent); color: white; padding: 0 0.2rem; border-radius: 3px;">$1</span>');
+        }
+
+        function hasConversions(item) {
+            return item["Smart Model"] || item["AltSmart Model"] || item["IOC Board"] || item["SWC Board"] || item["VMC Board"];
+        }
+
+        function updateSelected(items) {
+            items.forEach((item, index) => {
+                if (index === selectedIndex) {
+                    item.classList.add('selected');
+                    item.scrollIntoView({ block: 'nearest' });
+                } else {
+                    item.classList.remove('selected');
+                }
+            });
         }
 
         function selectModel(modelName) {
+            const searchInput = document.getElementById('searchModel');
+            const dropdown = document.getElementById('autocompleteDropdown');
+            
             searchInput.value = modelName;
-            autocomplete.classList.remove('show');
-            
-            const item = allData.find(d => d["Model"] === modelName);
-            
-            if (item) {
-                showResult(item);
-            }
+            dropdown.classList.remove('active');
+            searchData();
         }
 
-        function showResult(item) {
-            const modelNameEl = document.getElementById('modelName');
-            const smartModelEl = document.getElementById('smartModel');
-            
-            modelNameEl.textContent = item["Model"] || '-';
-            smartModelEl.textContent = item["Smart Model"] || 'ไม่มีข้อมูล';
-            
-            resultBox.classList.add('show');
+        function searchData() {
+            const searchText = document.getElementById('searchModel').value.toLowerCase();
+
+            filteredData = allData.filter(item => {
+                const model = (item["Model"] || "").toLowerCase();
+                return !searchText || model.includes(searchText);
+            });
+
+            displayResults();
+            updateStats();
         }
 
-        // Close autocomplete when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!searchInput.contains(e.target) && !autocomplete.contains(e.target)) {
-                autocomplete.classList.remove('show');
-            }
-        });
+        function displayResults() {
+            const container = document.getElementById('resultsContainer');
+            const resultsInfo = document.getElementById('resultsInfo');
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            loadData();
-        });
+            if (filteredData.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">😔</div>
+                        <p class="empty-state-text">ไม่พบผลลัพธ์ที่ตรงกับการค้นหา</p>
+                        <p style="margin-top: 0.5rem; color: var(--text-dim); font-size: 0.9rem;">
+                            ลองเปลี่ยนคำค้นหาใหม่
+                        </p>
+                    </div>
+                `;
+                resultsInfo.textContent = 'ไม่พบผลลัพธ์';
+                return;
+            }
+
+            resultsInfo.textContent = `แสดง ${filteredData.length} รายการ`;
+
+            container.innerHTML = filteredData.map((item, index) => {
+                const hasConversion = item["Smart Model"] || item["AltSmart Model"] || item["IOC Board"] || item["SWC Board"] || item["VMC Board"];
+                
+                return `
+                <div class="result-card" style="animation-delay: ${index * 0.05}s">
+                    <div class="model-header">
+                        <h3 class="model-name">${item["Model"] || 'N/A'}</h3>
+                        ${item["Model Year"] ? `<span class="model-year">${item["Model Year"]}</span>` : ''}
+                    </div>
+                    
+                    <div class="model-info">
+                        ${item["Machine Type"] ? `
+                        <div class="info-row">
+                            <span class="info-label">Machine Type:</span>
+                            <span class="info-value">${item["Machine Type"]}</span>
+                        </div>` : ''}
+                        ${item["Series"] ? `
+                        <div class="info-row">
+                            <span class="info-label">Series:</span>
+                            <span class="info-value">${item["Series"]}</span>
+                        </div>` : ''}
+                        ${item["Placed Qt."] ? `
+                        <div class="info-row">
+                            <span class="info-label">Placed Qty:</span>
+                            <span class="info-value">${item["Placed Qt."]}</span>
+                        </div>` : ''}
+                        ${item["Recommend"] && item["Recommend"].toLowerCase() === 'yes' ? `
+                        <div class="info-row">
+                            <span class="info-label">สถานะ:</span>
+                            <span class="badge badge-success">Recommended</span>
+                        </div>` : ''}
+                    </div>
+
+                    ${hasConversion ? `
+                    <div class="conversion-section">
+                        <h4 class="conversion-title">🔄 สามารถแปลงเป็น</h4>
+                        <div class="conversion-grid">
+                            ${item["Smart Model"] ? `
+                            <div class="conversion-item">
+                                <span class="conversion-label">Smart Model:</span>
+                                <span class="conversion-value">${item["Smart Model"]}</span>
+                            </div>` : ''}
+                            ${item["AltSmart Model"] ? `
+                            <div class="conversion-item">
+                                <span class="conversion-label">AltSmart Model:</span>
+                                <span class="conversion-value">${item["AltSmart Model"]}</span>
+                            </div>` : ''}
+                            ${item["VMC Board"] ? `
+                            <div class="conversion-item">
+                                <span class="conversion-label">VMC Board:</span>
+                                <span class="conversion-value">${item["VMC Board"]}</span>
+                            </div>` : ''}
+                            ${item["IOC Board"] ? `
+                            <div class="conversion-item">
+                                <span class="conversion-label">IOC Board:</span>
+                                <span class="conversion-value">${item["IOC Board"]}</span>
+                            </div>` : ''}
+                            ${item["SWC Board"] ? `
+                            <div class="conversion-item">
+                                <span class="conversion-label">SWC Board:</span>
+                                <span class="conversion-value">${item["SWC Board"]}</span>
+                            </div>` : ''}
+                        </div>
+                    </div>
+                    ` : `
+                    <div class="no-conversion">
+                        ⚠️ ไม่มีข้อมูลการแปลง
+                    </div>
+                    `}
+                </div>
+            `}).join('');
+        }
+
+        function updateStats() {
+            document.getElementById('totalModels').textContent = allData.length;
+            document.getElementById('resultCount').textContent = filteredData.length;
+            
+            const modelsWithConversion = filteredData.filter(item => {
+                return item["Smart Model"] || item["AltSmart Model"] || item["IOC Board"] || item["SWC Board"] || item["VMC Board"];
+            }).length;
+            
+            document.getElementById('conversionCount').textContent = modelsWithConversion;
+        }
     </script>
 </body>
 </html>

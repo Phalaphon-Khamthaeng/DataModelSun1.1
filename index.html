@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Model Conversion Finder - Google Sheets</title\\>
+    <title>Model Conversion Finder</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Sun Vending Theme - Bright & Clean */
-            --primary: #e30613;          /* สีแดง Sun หลัก */
-            --accent: #ff1744;           /* สีแดงสด */
+            --primary: #e30613;
+            --accent: #ff1744;
             --accent-glow: #ff174433;
-            --secondary: #ff6b35;        /* สีส้มสด */
-            --bg: #f8f9fa;               /* พื้นหลังขาวอ่อน */
-            --surface: #ffffff;          /* พื้นผิวขาว */
-            --surface-light: #f5f5f5;    /* เทาอ่อนมาก */
-            --text: #2d3436;             /* ข้อความเทาเข้ม */
-            --text-dim: #636e72;         /* ข้อความเทากลาง */
-            --border: #e1e8ed;           /* ขอบสีเทาอ่อน */
-            --success: #00b894;          /* เขียวสด */
-            --warning: #fdcb6e;          /* เหลืองสด */
+            --secondary: #ff6b35;
+            --bg: #f8f9fa;
+            --surface: #ffffff;
+            --surface-light: #f5f5f5;
+            --text: #2d3436;
+            --text-dim: #636e72;
+            --border: #e1e8ed;
+            --success: #00b894;
+            --warning: #fdcb6e;
             --shadow: rgba(0, 0, 0, 0.08);
             --shadow-hover: rgba(227, 6, 19, 0.15);
         }
@@ -36,97 +35,62 @@
             color: var(--text);
             min-height: 100vh;
             overflow-x: hidden;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(227, 6, 19, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(255, 23, 68, 0.06) 0%, transparent 50%);
-            animation: drift 20s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        @keyframes drift {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(30px, -30px) rotate(2deg); }
-            66% { transform: translate(-20px, 20px) rotate(-2deg); }
+            font-size: 13px;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 2rem;
-            position: relative;
-            z-index: 1;
+            padding: 0.5rem;
         }
 
         header {
             text-align: center;
-            margin-bottom: 3rem;
-            animation: fadeInDown 0.8s ease-out;
+            margin-bottom: 0.75rem;
         }
 
         h1 {
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-size: clamp(1.2rem, 3.5vw, 1.8rem);
             font-weight: 900;
             background: linear-gradient(135deg, var(--accent), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.15rem;
             letter-spacing: -0.02em;
             text-transform: uppercase;
         }
 
         .subtitle {
             color: var(--text-dim);
-            font-size: 1.1rem;
+            font-size: 0.75rem;
             font-weight: 300;
         }
 
         .sync-status {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-            padding: 0.5rem 1rem;
+            gap: 0.3rem;
+            margin-top: 0.3rem;
+            padding: 0.2rem 0.5rem;
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.85rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
         }
 
-        .sync-status.loading {
-            color: var(--warning);
-        }
-
-        .sync-status.success {
-            color: var(--success);
-        }
-
-        .sync-status.error {
-            color: var(--secondary);
-        }
+        .sync-status.loading { color: var(--warning); }
+        .sync-status.success { color: var(--success); }
+        .sync-status.error { color: var(--secondary); }
 
         .search-section {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px var(--shadow);
-            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+            border-radius: 8px;
+            padding: 0.6rem;
+            margin-bottom: 0.6rem;
+            box-shadow: 0 1px 8px var(--shadow);
         }
 
         .input-group {
@@ -135,21 +99,21 @@
 
         label {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             font-weight: 600;
             color: var(--accent);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
         input[type="text"] {
             width: 100%;
-            padding: 1rem 3rem 1rem 1.25rem;
-            font-size: 1rem;
+            padding: 0.5rem 2rem 0.5rem 0.7rem;
+            font-size: 0.8rem;
             font-family: 'Sarabun', sans-serif;
             border: 2px solid var(--border);
-            border-radius: 12px;
+            border-radius: 6px;
             background: var(--surface);
             color: var(--text);
             transition: all 0.3s ease;
@@ -158,17 +122,17 @@
         input[type="text"]:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 4px var(--accent-glow);
+            box-shadow: 0 0 0 2px var(--accent-glow);
         }
 
         .search-icon {
             position: absolute;
-            right: 1rem;
+            right: 0.6rem;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-dim);
             pointer-events: none;
-            font-size: 1.2rem;
+            font-size: 0.9rem;
         }
 
         .autocomplete-dropdown {
@@ -178,33 +142,21 @@
             right: 0;
             background: var(--surface);
             border: 1px solid var(--accent);
-            border-radius: 12px;
-            margin-top: 0.5rem;
-            max-height: 300px;
+            border-radius: 6px;
+            margin-top: 0.3rem;
+            max-height: 200px;
             overflow-y: auto;
             z-index: 1000;
-            box-shadow: 0 8px 32px var(--shadow-hover);
+            box-shadow: 0 4px 16px var(--shadow-hover);
             display: none;
         }
 
         .autocomplete-dropdown.active {
             display: block;
-            animation: slideDown 0.3s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .autocomplete-item {
-            padding: 1rem;
+            padding: 0.5rem;
             cursor: pointer;
             transition: all 0.2s ease;
             border-bottom: 1px solid var(--border);
@@ -217,14 +169,9 @@
             border-bottom: none;
         }
 
-        .autocomplete-item:hover {
-            background: var(--surface-light);
-            padding-left: 1.5rem;
-        }
-
+        .autocomplete-item:hover,
         .autocomplete-item.selected {
-            background: var(--accent-glow);
-            border-left: 3px solid var(--accent);
+            background: var(--surface-light);
         }
 
         .autocomplete-main {
@@ -234,150 +181,155 @@
         .autocomplete-title {
             font-weight: 600;
             color: var(--text);
-            margin-bottom: 0.25rem;
+            font-size: 0.8rem;
+            margin-bottom: 0.2rem;
         }
 
         .autocomplete-meta {
-            font-size: 0.85rem;
-            color: var(--text-dim);
+            display: flex;
+            gap: 0.3rem;
+            flex-wrap: wrap;
         }
 
         .autocomplete-tag {
-            display: inline-block;
-            padding: 0.2rem 0.5rem;
-            background: var(--accent-glow);
-            color: var(--accent);
-            border-radius: 4px;
-            font-size: 0.75rem;
-            margin-right: 0.25rem;
+            background: var(--surface-light);
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            color: var(--text-dim);
         }
 
-        .stats-section {
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.5rem;
+            margin-bottom: 0.6rem;
         }
 
         .stat-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.5rem;
+            border-radius: 6px;
+            padding: 0.5rem;
             text-align: center;
-            transition: all 0.3s ease;
+            box-shadow: 0 1px 6px var(--shadow);
         }
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 24px var(--shadow-hover);
-            border-color: var(--accent);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
+        .stat-value {
+            font-size: 1.3rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--accent), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--accent);
+            margin-bottom: 0.15rem;
         }
 
         .stat-label {
+            font-size: 0.65rem;
             color: var(--text-dim);
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .results-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.6rem;
+            box-shadow: 0 1px 8px var(--shadow);
         }
 
         .results-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
-            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+            margin-bottom: 0.6rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .results-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text);
         }
 
         .results-info {
+            font-size: 0.7rem;
             color: var(--text-dim);
-            font-size: 0.95rem;
         }
 
-        .results-container {
+        .results-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 1.5rem;
+            gap: 0.5rem;
         }
 
         .result-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.5rem;
+            border-radius: 6px;
+            padding: 0.6rem;
             transition: all 0.3s ease;
-            animation: fadeInUp 0.6s ease-out backwards;
         }
 
         .result-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 32px var(--shadow-hover);
-            border-color: var(--accent);
+            box-shadow: 0 3px 12px var(--shadow-hover);
+            transform: translateY(-1px);
         }
 
         .model-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--border);
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border);
         }
 
         .model-name {
-            font-size: 1.25rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: var(--text);
         }
 
         .model-year {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
             color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 8px;
-            font-size: 0.85rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
             font-weight: 600;
         }
 
         .model-info {
-            margin-bottom: 1rem;
+            display: grid;
+            gap: 0.3rem;
+            margin-bottom: 0.5rem;
         }
 
         .info-row {
             display: flex;
             justify-content: space-between;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--surface-light);
-        }
-
-        .info-row:last-child {
-            border-bottom: none;
+            align-items: center;
+            padding: 0.25rem 0;
         }
 
         .info-label {
+            font-size: 0.7rem;
             color: var(--text-dim);
-            font-size: 0.9rem;
+            font-weight: 500;
         }
 
         .info-value {
-            font-weight: 600;
+            font-size: 0.75rem;
             color: var(--text);
+            font-weight: 600;
         }
 
         .badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 6px;
-            font-size: 0.85rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
             font-weight: 600;
+            text-transform: uppercase;
         }
 
         .badge-success {
@@ -386,106 +338,104 @@
         }
 
         .conversion-section {
-            background: linear-gradient(135deg, var(--accent-glow), rgba(255, 107, 53, 0.1));
-            border-radius: 12px;
-            padding: 1rem;
-            margin-top: 1rem;
+            background: linear-gradient(135deg, rgba(0, 184, 148, 0.05), rgba(255, 23, 68, 0.05));
+            border: 1px solid var(--success);
+            border-radius: 6px;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
         }
 
         .conversion-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--accent);
-            margin-bottom: 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 0.4rem;
         }
 
         .conversion-grid {
             display: grid;
-            gap: 0.5rem;
+            gap: 0.3rem;
         }
 
         .conversion-item {
-            background: var(--surface);
-            padding: 0.75rem;
-            border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: var(--surface);
+            padding: 0.3rem 0.5rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
         }
 
         .conversion-label {
+            font-size: 0.7rem;
             color: var(--text-dim);
-            font-size: 0.85rem;
+            font-weight: 500;
         }
 
         .conversion-value {
-            font-weight: 600;
-            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--success);
         }
 
         .no-conversion {
-            background: var(--surface-light);
-            border-radius: 12px;
-            padding: 1rem;
+            background: rgba(253, 203, 110, 0.1);
+            border: 1px solid var(--warning);
+            border-radius: 6px;
+            padding: 0.5rem;
             text-align: center;
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            margin-top: 1rem;
+            color: var(--warning);
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
         }
 
         .empty-state {
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 1.5rem 0.75rem;
             color: var(--text-dim);
         }
 
         .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
         }
 
         .empty-state-text {
-            font-size: 1.2rem;
+            font-size: 0.85rem;
             font-weight: 600;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            color: var(--text);
         }
 
         @media (max-width: 768px) {
             .container {
-                padding: 1rem;
+                padding: 0.4rem;
             }
 
-            .search-section {
-                padding: 1.5rem;
+            h1 {
+                font-size: 1.2rem;
             }
 
-            .stats-section {
-                grid-template-columns: 1fr;
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.4rem;
             }
 
-            .results-container {
-                grid-template-columns: 1fr;
+            .stat-card {
+                padding: 0.4rem;
+            }
+
+            .stat-value {
+                font-size: 1.1rem;
+            }
+
+            .result-card {
+                padding: 0.5rem;
+            }
+
+            .model-name {
+                font-size: 0.85rem;
             }
         }
     </style>
@@ -493,122 +443,87 @@
 <body>
     <div class="container">
         <header>
-            <p>Model Conversion</p>
-            <p class="subtitle">ค้นหาข้อมูลรุ่นและการแปลงโมเดล</p>
-            <div id="syncStatus" class="sync-status loading">
-                <span>⏳</span>
-                <span>กำลังโหลดข้อมูล...</span>
+            
+            <p class="subtitle">ค้นหาและตรวจสอบรุ่นเครื่องขายอัตโนมัติ</p>
+            <div class="sync-status loading" id="syncStatus">
+                <span>⟳</span><span>กำลังโหลดข้อมูล...</span>
             </div>
         </header>
 
         <div class="search-section">
             <div class="input-group">
-                <label for="searchModel">ค้นหารุ่น (Model)</label>
-                <div style="position: relative;">
-                    <input 
-                        type="text" 
-                        id="searchModel" 
-                        placeholder="พิมพ์ชื่อรุ่นที่ต้องการค้นหา..."
-                        autocomplete="off"
-                    >
-                    <span class="search-icon">🔍</span>
-                </div>
-                <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
+                <label for="searchModel">ค้นหารุ่นเครื่อง</label>
+                <input 
+                    type="text" 
+                    id="searchModel" 
+                    placeholder="พิมพ์ชื่อรุ่นเครื่อง..."
+                    autocomplete="off"
+                >
+                <span class="search-icon">🔍</span>
+                <div class="autocomplete-dropdown" id="autocompleteDropdown"></div>
             </div>
         </div>
 
-        <div class="stats-section">
+        <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-number" id="totalModels">0</div>
+                <div class="stat-value" id="totalModels">0</div>
                 <div class="stat-label">รุ่นทั้งหมด</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="resultCount">0</div>
-                <div class="stat-label">ผลลัพธ์ที่พบ</div>
+                <div class="stat-value" id="resultCount">0</div>
+                <div class="stat-label">ผลลัพธ์</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="conversionCount">0</div>
-                <div class="stat-label">มีข้อมูลแปลง</div>
+                <div class="stat-value" id="conversionCount">0</div>
+                <div class="stat-label">แปลงได้</div>
             </div>
         </div>
 
-        <div class="results-header">
-            <h2 id="resultsInfo">ผลการค้นหา</h2>
-        </div>
-
-        <div id="resultsContainer" class="results-container">
-            <!-- Results will be populated here -->
+        <div class="results-section">
+            <div class="results-header">
+                <h2 class="results-title">📋 รายการผลลัพธ์</h2>
+                <span class="results-info" id="resultsInfo">แสดง 0 รายการ</span>
+            </div>
+            <div class="results-grid" id="resultsContainer">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔍</div>
+                    <p class="empty-state-text">กำลังโหลดข้อมูล...</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // ===== ใส่ Google Sheets URL ที่นี่ =====
-        // วิธีการ: File > Share > Publish to web > Link > Sheet1 > CSV
-        const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQKqIJwW0bdW77q6mNbDaRYUI8UzStbSTOH1cl6dGEpX12m-In68WTP4SlKAcDv4LGgLrMvq-SS07S0/pub?output=csv';
-        // ตัวอย่าง: 'https://docs.google.com/spreadsheets/d/e/2PACX-xxxxx/pub?output=csv'
-
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRLFwHxiLzq4LQQFUQWH5vYZZCOZN9mS_MIGaXoHjyIBaGgRDPwP3K9IuPPfZ9_8gNVn-Gl5vHF7Jfo/pub?output=csv';
         let allData = [];
         let filteredData = [];
         let selectedIndex = -1;
-
-        // ฟังก์ชันแปลง CSV เป็น Array
-        function parseCSV(csv) {
-            const lines = csv.split('\n');
-            return lines.map(line => {
-                const values = [];
-                let current = '';
-                let inQuotes = false;
-                
-                for (let i = 0; i < line.length; i++) {
-                    const char = line[i];
-                    
-                    if (char === '"') {
-                        inQuotes = !inQuotes;
-                    } else if (char === ',' && !inQuotes) {
-                        values.push(current.trim());
-                        current = '';
-                    } else {
-                        current += char;
-                    }
-                }
-                values.push(current.trim());
-                return values;
-            }).filter(row => row.some(cell => cell !== ''));
-        }
 
         async function loadData() {
             const syncStatus = document.getElementById('syncStatus');
             
             try {
-                syncStatus.className = 'sync-status loading';
-                syncStatus.innerHTML = '<span>⏳</span><span>กำลังโหลดข้อมูล...</span>';
-
-                const response = await fetch(GOOGLE_SHEETS_CSV_URL);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
+                const response = await fetch(SHEET_URL);
                 const csvText = await response.text();
-                const rows = parseCSV(csvText);
-
-                if (!rows || rows.length === 0) {
-                    throw new Error('No data found');
-                }
-
-                const headers = rows[0];
-                allData = rows.slice(1).map(row => {
-                    const obj = {};
-                    headers.forEach((header, index) => {
-                        obj[header] = row[index] || '';
+                
+                const lines = csvText.split('\n');
+                const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+                
+                allData = lines.slice(1)
+                    .filter(line => line.trim())
+                    .map(line => {
+                        const values = line.split(',').map(v => v.trim().replace(/"/g, ''));
+                        const obj = {};
+                        headers.forEach((header, index) => {
+                            obj[header] = values[index] || '';
+                        });
+                        return obj;
                     });
-                    return obj;
-                });
 
                 filteredData = [...allData];
                 displayResults();
                 updateStats();
-
+                
                 syncStatus.className = 'sync-status success';
                 syncStatus.innerHTML = '<span>✓</span><span>โหลดข้อมูลสำเร็จ</span>';
 
@@ -639,16 +554,16 @@
             const searchText = e.target.value.toLowerCase();
             selectedIndex = -1;
 
+            // แสดงผลลัพธ์ทันทีทุกครั้งที่พิมพ์
+            searchData();
+
             if (searchText.length < 1) {
                 document.getElementById('autocompleteDropdown').classList.remove('active');
-                filteredData = [...allData];
-                displayResults();
-                updateStats();
                 return;
             }
 
+            // แสดง autocomplete dropdown
             showAutocomplete(searchText);
-            searchData();
         }
 
         function handleKeyDown(e) {
@@ -738,12 +653,23 @@
         }
 
         function searchData() {
-            const searchText = document.getElementById('searchModel').value.toLowerCase();
+            const searchText = document.getElementById('searchModel').value.toLowerCase().trim();
 
-            filteredData = allData.filter(item => {
-                const model = (item["Model"] || "").toLowerCase();
-                return !searchText || model.includes(searchText);
-            });
+            if (searchText.length === 0) {
+                filteredData = [...allData];
+            } else {
+                filteredData = allData.filter(item => {
+                    const model = (item["Model"] || "").toLowerCase();
+                    const series = (item["Series"] || "").toLowerCase();
+                    const machineType = (item["Machine Type"] || "").toLowerCase();
+                    const smartModel = (item["Smart Model"] || "").toLowerCase();
+                    
+                    return model.includes(searchText) || 
+                           series.includes(searchText) || 
+                           machineType.includes(searchText) ||
+                           smartModel.includes(searchText);
+                });
+            }
 
             displayResults();
             updateStats();
@@ -758,7 +684,7 @@
                     <div class="empty-state">
                         <div class="empty-state-icon">😔</div>
                         <p class="empty-state-text">ไม่พบผลลัพธ์ที่ตรงกับการค้นหา</p>
-                        <p style="margin-top: 0.5rem; color: var(--text-dim); font-size: 0.9rem;">
+                        <p style="margin-top: 0.5rem; color: var(--text-dim); font-size: 0.85rem;">
                             ลองเปลี่ยนคำค้นหาใหม่
                         </p>
                     </div>
@@ -771,7 +697,7 @@
 
             container.innerHTML = filteredData.map((item, index) => {
                 return `
-                <div class="result-card" style="animation-delay: ${index * 0.05}s">
+                <div class="result-card">
                     <div class="model-header">
                         <h3 class="model-name">${item["Model"] || 'N/A'}</h3>
                         ${item["Model Year"] ? `<span class="model-year">${item["Model Year"]}</span>` : ''}

@@ -569,6 +569,20 @@
             const dropdown = document.getElementById('autocompleteDropdown');
             const items = dropdown.querySelectorAll('.autocomplete-item');
 
+            // ถ้ากด Enter และไม่มี dropdown หรือไม่ได้เลือกรายการ ให้ค้นหา
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                if (dropdown.classList.contains('active') && selectedIndex >= 0 && items.length > 0) {
+                    // เลือกรายการจาก dropdown
+                    items[selectedIndex].click();
+                } else {
+                    // ค้นหาตามที่พิมพ์
+                    dropdown.classList.remove('active');
+                    searchData();
+                }
+                return;
+            }
+
             if (!dropdown.classList.contains('active') || items.length === 0) return;
 
             if (e.key === 'ArrowDown') {
@@ -579,11 +593,6 @@
                 e.preventDefault();
                 selectedIndex = Math.max(selectedIndex - 1, 0);
                 updateSelected(items);
-            } else if (e.key === 'Enter') {
-                e.preventDefault();
-                if (selectedIndex >= 0) {
-                    items[selectedIndex].click();
-                }
             } else if (e.key === 'Escape') {
                 dropdown.classList.remove('active');
             }

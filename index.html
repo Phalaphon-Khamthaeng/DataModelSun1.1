@@ -457,7 +457,7 @@
 <body>
     <div class="container">
         <header>
-            <h1 class="main-title">🔍 ค้นหาข้อมูลรุ่นที่แปลงโมเดล</h1>
+            <h1 class="main-title">🔍 ค้นหาโมเดลที่แปลงเป็นตู้สมาร์ทได้</h1>
           <!-- <h1 class="subtitle">ค้นหาข้อมูลรุ่นและการแปลงโมเดล</h1> -->
             <div class="sync-status loading" id="syncStatus">
                 <span>⟳</span><span>กำลังโหลดข้อมูล...</span>
@@ -740,10 +740,7 @@
                             <span class="info-value">${item["Series"]}</span>
                         </div>` : ''}
                         ${item["Placed Qt."] ? `
-                        <div class="info-row">
-                            <span class="info-label">Placed Qty:</span>
-                            <span class="info-value">${item["Placed Qt."]}</span>
-                        </div>` : ''}
+
                         ${item["Recommend"] && item["Recommend"].toLowerCase() === 'yes' ? `
                         <div class="info-row">
                             <span class="info-label">สถานะ:</span>
